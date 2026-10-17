@@ -11,7 +11,7 @@ x = (screen_width - needed_width) // 2
 y = (screen_height - needed_height) // 2
 
 root.geometry(f"{needed_width}x{needed_height}+{x}+{y}") #screen centered with offset x and y amount
-root.iconbitmap(r"SmartStudyManager\assets\logo.ico") #image
+root.iconbitmap(r"Orbit\assets\logo.ico") #image
 '''
 if <databse>.<fullscreen>:
     root.state("zoomed")
