@@ -1,1 +1,1 @@
-Install requirements.txt before starting
+Install requirements.txt (inside main folder "Orbit") before starting
