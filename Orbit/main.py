@@ -20,11 +20,11 @@ if <databse>.<fullscreen>:
 if <database>.<resizable> == False:
     root.resizable(False,False)
 '''
-root.title("Smart Study Manager")
+root.title("Orbit")
 root.minsize(1100,700) #so user cant decrese size less that this amount
+root.configure(fg_color=("#DBDBDB","#242424")) #(light_mode_color, dark_mode_color) depending on system bg color
 
 from pages.login import Login
-
-login_page_start = Login(root) ; login_page_start.pack()
+login_page_start = Login(root) ; login_page_start.pack(fill="both",expand=True) #so the entire window is being used
 
 root.mainloop()
