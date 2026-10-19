@@ -1,3 +1,6 @@
+import ctypes #for changing app logo in taskbar
+ctypes.windll.shell32.SetCurrentProcessExplicitAppUserModelID("Orbit")
+
 import customtkinter as ctk
 # SSG connect the db and these files all them are in quotes or comments
 root = ctk.CTk()
