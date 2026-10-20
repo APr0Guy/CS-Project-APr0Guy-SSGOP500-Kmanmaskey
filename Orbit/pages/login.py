@@ -1,5 +1,6 @@
 import customtkinter as ctk
-from PIL import Image #for loading image
+import tkinter as tk
+from PIL import Image, ImageSequence, ImageTk #for loading image
 import webbrowser #for opening url when clicking logo and all
 
 class Login(ctk.CTkFrame):
@@ -17,35 +18,51 @@ class Login(ctk.CTkFrame):
         self.side_panel_with_logo.grid_columnconfigure(0,weight=1) #only 1 column so all items inside is centered
         self.side_panel_with_logo.grid_rowconfigure(tuple(i for i in range(10)),weight=1) #divides frame into n rows equally
 
-        self.side_panel_with_logo.configure(fg_color = ("#FBE076","#D4AF37"))
+        self.side_panel_with_logo.configure(fg_color="transparent")
+
+        #for gif
+        self.gif_path = r"Orbit\assets\orbit_muted.gif"
+        self.gif_image = Image.open(self.gif_path)
+        self.gif_frames = []
+
+        for frame in ImageSequence.Iterator(self.gif_image):
+            self.gif_frames.append(frame.convert("RGBA").copy())
+
+        self.gif_durations = [
+            frame.info.get("duration", self.gif_image.info.get("duration", 100))
+            for frame in ImageSequence.Iterator(self.gif_image)
+        ]
+
+        self.gif_canvas = tk.Canvas(self.side_panel_with_logo, highlightthickness=0, bd=0)
+        self.gif_canvas.place(x=0, y=0, relwidth=1, relheight=1)
+        self.gif_background_item = self.gif_canvas.create_image(0, 0, anchor="nw")
+
+        self.side_panel_with_logo.bind("<Configure>", self.resize_gif_background)
+        self.gif_canvas.bind("<Button-1>", #opens github page when clicking left side
+            lambda event:webbrowser.open("https://github.com/APr0Guy/CS-Project-APr0Guy-SSGOP500-Kmanmaskey"))
         self.side_panel_with_logo.bind("<Button-1>", #opens github page when clicking left side
             lambda event:webbrowser.open("https://github.com/APr0Guy/CS-Project-APr0Guy-SSGOP500-Kmanmaskey"))
 
                                 # ------------------------- Image
-        logo_path_dark = r"Orbit\assets\logo.png"
-        logo_path_light = r"Orbit\assets\old_logo.png"
+        logo_path_dark = r"Orbit\assets\old_logo.png"
+        logo_path_light = r"Orbit\assets\logo.png"
 
-        self.loaded_logo = ctk.CTkImage(light_image = Image.open(logo_path_light),
-                                        dark_image = Image.open(logo_path_dark), size=(300,300)) #using same logo for both
-
-        self.label_logo = ctk.CTkLabel(self.side_panel_with_logo, image=self.loaded_logo, text="")
-        self.label_logo.grid(row=0,column=0) #loads image row and col 0 makes it apprear on top
+        self.logo_image_dark = Image.open(logo_path_dark).convert("RGBA")
+        self.logo_image_light = Image.open(logo_path_light).convert("RGBA")
+        self.logo_photo = None
+        self.logo_canvas_item = self.gif_canvas.create_image(0, 0, anchor="center")
 
                                 # --------------------------- Text
-        self.test = ctk.CTkLabel(self.side_panel_with_logo, text="ORBIT", text_color="black",
-                                              font=("Segoe Script",35,"bold"))
-        self.test.grid(row=1,column=0)
-        
-        self.catphrase = ctk.CTkLabel(self.side_panel_with_logo, text="Plan smart. Stay in orbit.", text_color="black",
-                                      font=("MV Boli",25))
-        self.catphrase.grid(row=2,column=0)
-
-        self.text_made_by = ctk.CTkLabel(self.side_panel_with_logo,font=("Courier New",20), text_color="black",
-                text="Project By:\n - APr0Guy [UI]\n - SSGOP500 [Connecting UI and Database]\n - Kmanmaskey [Database]")
-        self.text_made_by.grid(row=4,column=0)
-
-        self.caution = ctk.CTkLabel(self.side_panel_with_logo, text="Click anywhere on this side to open github page", text_color="black")
-        self.caution.grid(row=9,column=0)
+        self.orbit_title_item = self.gif_canvas.create_text(0, 0, text="ORBIT", fill="white",
+                                      font=("Segoe Script",35,"bold"), anchor="center")
+        self.catphrase_item = self.gif_canvas.create_text(0, 0, text="Plan smart. Stay in orbit.", fill="white",
+                                      font=("MV Boli",25), anchor="center")
+        self.credits_item = self.gif_canvas.create_text(0, 0,
+                text="Project By:\n - APr0Guy [UI]\n - SSGOP500 [Connecting UI and Database]\n - Kmanmaskey [Database]",
+                fill="white", font=("Courier New",20), anchor="center", justify="center")
+        self.caution_item = self.gif_canvas.create_text(0, 0,
+                    text="Click anywhere on this side to open github page\nAND YES APr0Guy made all the UI, GIFS and all EVERYTHING", fill="white", anchor="center")
+        self.after(0, lambda: self.animate_gif_background(0))
         #------------------------------------------------
         #------------------------------------------------ side login
         self.side_panel_login = ctk.CTkFrame(self) ; self.side_panel_login.grid(column=1,row=0,sticky="nesw")
@@ -148,7 +165,7 @@ class Login(ctk.CTkFrame):
             fg_color="#66738D",command=lambda: self.change_mode("Sign Up"))
         self.create_new_acc_btn.grid(row=2,column = 1,sticky="nesw")
 
-
+        self.login_btn.bind("<Button-1>",lambda event:self.login_proceed())
         # sign up side
                         # --------------------------- Input - user
         self.user_container_sign_up = ctk.CTkFrame(self.side_panel_login,fg_color="transparent",border_width=2,corner_radius=8,
@@ -251,7 +268,7 @@ class Login(ctk.CTkFrame):
             hover_color=("#D9816F","#DDC881"),text_color=("white","black"),fg_color="#66738D")
         self.login_btn_sign_up.grid(row=2,column = 1,sticky="nesw")
 
-
+        self.login_btn_sign_up.bind("<Button-1>",lambda event:self.login_proceed())
         #------------------------------------------------
         self.change_mode("Login") #cause once sign up containers load they replace login containers
 
@@ -312,7 +329,7 @@ class Login(ctk.CTkFrame):
 
             #changes visibility of that only
             if mode == "Login":
-                self.pass_input.configure(show="*")  
+                self.pass_input.configure(show="*")
             else:
                 self.pass_input_sign_up.configure(show="*") #does both at once show pass in sign up and conf show pass
                 self.conf_pass_input_sign_up.configure(show="*")
@@ -322,3 +339,58 @@ class Login(ctk.CTkFrame):
         else: #does both at once show pass in sign up and conf show pass
             self.show_pass_sign_up.configure(image=self.loaded_pass_show_logo)
             self.conf_show_pass_sign_up.configure(image=self.loaded_pass_show_logo)
+
+    #action for clicking login
+    def login_proceed(self):
+        self.destroy() #removes all login page items
+
+        from pages.dashboard import Dashboard
+        dashboard_page_start = Dashboard(self.master) ; dashboard_page_start.pack(fill="both",expand=True)
+        #self.master is sending this parent (root from main) to dashboard 
+
+    #for animating gif
+    def resize_gif_background(self, event=None):
+        self.gif_bg_width = max(self.side_panel_with_logo.winfo_width(), 1)
+        self.gif_bg_height = max(self.side_panel_with_logo.winfo_height(), 1)
+        if hasattr(self, "gif_canvas"):
+            self.gif_canvas.coords(self.gif_background_item, 0, 0)
+            self.update_gif_foreground()
+
+    def update_gif_foreground(self):
+        width = max(self.side_panel_with_logo.winfo_width(), 1)
+        height = max(self.side_panel_with_logo.winfo_height(), 1)
+
+        if ctk.get_appearance_mode() == "Dark":
+            logo_image = self.logo_image_dark
+        else:
+            logo_image = self.logo_image_light
+
+        resized_logo = logo_image.resize((300, 300), Image.Resampling.LANCZOS)
+        self.logo_photo = ImageTk.PhotoImage(resized_logo)
+        self.gif_canvas.itemconfigure(self.logo_canvas_item, image=self.logo_photo)
+        self.gif_canvas.coords(self.logo_canvas_item, width / 2, height * 0.25)
+        self.gif_canvas.coords(self.orbit_title_item, width / 2, height * 0.52)
+        self.gif_canvas.coords(self.catphrase_item, width / 2, height * 0.61)
+        self.gif_canvas.coords(self.credits_item, width / 2, height * 0.78)
+        self.gif_canvas.coords(self.caution_item, width / 2, height * 0.97)
+
+    def animate_gif_background(self, index):
+        if not self.winfo_exists():
+            return
+
+        width = max(self.side_panel_with_logo.winfo_width(), 1)
+        height = max(self.side_panel_with_logo.winfo_height(), 1)
+
+        frame = self.gif_frames[index].resize(
+            (width, height), Image.Resampling.LANCZOS
+        )
+
+        self.gif_bg_photo = ImageTk.PhotoImage(frame)
+        self.gif_canvas.itemconfigure(self.gif_background_item, image=self.gif_bg_photo)
+        self.gif_canvas.tag_lower(self.gif_background_item)
+        self.update_gif_foreground()
+
+        delay = max(self.gif_durations[index], 20)
+        next_index = (index + 1) % len(self.gif_frames)
+
+        self.after(delay, lambda: self.animate_gif_background(next_index))
