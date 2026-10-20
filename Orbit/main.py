@@ -5,6 +5,8 @@ import customtkinter as ctk
 # SSG connect the db and these files all them are in quotes or comments
 root = ctk.CTk()
 
+#ctk.set_appearance_mode("Light")  #testing purposes
+
 needed_width = 1100 #<database>.<width>
 needed_height = 700 #<database>.<width>
 screen_width = root.winfo_screenwidth()
