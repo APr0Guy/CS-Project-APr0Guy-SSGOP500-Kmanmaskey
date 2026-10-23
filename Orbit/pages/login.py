@@ -61,7 +61,7 @@ class Login(ctk.CTkFrame):
                 text="Project By:\n - APr0Guy [UI]\n - SSGOP500 [Connecting UI and Database]\n - Kmanmaskey [Database]",
                 fill="white", font=("Courier New",20), anchor="center", justify="center")
         self.caution_item = self.gif_canvas.create_text(0, 0,
-                    text="Click anywhere on this side to open github page\nAND YES APr0Guy made all the UI, GIFS and all EVERYTHING", fill="white", anchor="center")
+                    text="Click anywhere on this side to open github page\nAND YES APr0Guy made EVERYTHING you see rn (I WORKED OVERTIME FOR TS)", fill="white", anchor="center")
         self.after(0, lambda: self.animate_gif_background(0))
         #------------------------------------------------
         #------------------------------------------------ side login
