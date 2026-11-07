@@ -17,15 +17,13 @@ SETUP
    py -m pip install -r Orbit/requirements.txt
 
 4. Set your Meteosource API key before starting the app. (https://www.meteosource.com/)
-   PowerShell:
+   Orbit/config.json/
+   
+   {
+    "weather_api_key": "YOUR_API_KEY_HERE"
+}
 
-   $env:METEOSOURCE_API_KEY="YOUR_METEOSOURCE_API_KEY"
-
-   Command Prompt:
-
-   set METEOSOURCE_API_KEY=YOUR_METEOSOURCE_API_KEY
-
-5. Start Orbit:
+6. Start Orbit:
 
    py Orbit/main.py
 
