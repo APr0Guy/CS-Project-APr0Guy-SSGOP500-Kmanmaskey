@@ -1,2 +1,3 @@
-pip install customtkinter
-pip install Pillow
+customtkinter>=5.2.2
+Pillow>=10.0.0
+aiohttp>=3.9.0

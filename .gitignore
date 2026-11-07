@@ -1,0 +1,7 @@
+__pycache__/
+*.py[cod]
+.DS_Store
+Thumbs.db
+Orbit/database/*.db
+Orbit/database/attachments/*
+!Orbit/database/attachments/.gitkeep

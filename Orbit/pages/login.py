@@ -2,6 +2,8 @@ import customtkinter as ctk
 import tkinter as tk
 from PIL import Image, ImageSequence, ImageTk #for loading image
 import webbrowser #for opening url when clicking logo and all
+from tkinter import messagebox
+from database import db
 
 class Login(ctk.CTkFrame):
     def __init__(self, parent):
@@ -13,6 +15,7 @@ class Login(ctk.CTkFrame):
         self.grid_rowconfigure(0,weight=1)
 
         self.pass_visibility_change = {"Login":False,"Sign Up":False} #for password showing or not
+        self.current_mode = "Login"
         #------------------------------------------------ side image banner for login
         self.side_panel_with_logo = ctk.CTkFrame(self) ; self.side_panel_with_logo.grid(column=0,row=0,sticky="nesw")
         self.side_panel_with_logo.grid_columnconfigure(0,weight=1) #only 1 column so all items inside is centered
@@ -61,7 +64,7 @@ class Login(ctk.CTkFrame):
                 text="Project By:\n - APr0Guy [UI]\n - SSGOP500 [Connecting UI and Database]\n - Kmanmaskey [Database]",
                 fill="white", font=("Courier New",20), anchor="center", justify="center")
         self.caution_item = self.gif_canvas.create_text(0, 0,
-                    text="Click anywhere on this side to open github page\nAND YES APr0Guy made EVERYTHING you see rn (I WORKED OVERTIME FOR TS)", fill="white", anchor="center")
+                    text="Click anywhere on this side to open github page\nAND YES APr0Guy made EVERYTHING you see rn (I WORKED OVERTIME FOR TS)\nP.S.: Kmanmaskey didnt do shit :D", fill="white", anchor="center")
         self.after(0, lambda: self.animate_gif_background(0))
         #------------------------------------------------
         #------------------------------------------------ side login
@@ -153,7 +156,7 @@ class Login(ctk.CTkFrame):
 
         self.login_btn = ctk.CTkButton(self.holder_login_create_container,text="Login",height=44,
             hover_color=("#374151","#E5E7EB"),text_color=("white","black"),font=("Arial",15),
-            fg_color=("#FC5C3D","#D4AF37"))
+            fg_color=("#FC5C3D","#D4AF37"),command=self.login_proceed)
         self.login_btn.grid(row=0,column = 1,sticky="nesw")
 
         self.or_label_middle = ctk.CTkLabel(self.holder_login_create_container,text_color="grey",
@@ -165,7 +168,6 @@ class Login(ctk.CTkFrame):
             fg_color="#66738D",command=lambda: self.change_mode("Sign Up"))
         self.create_new_acc_btn.grid(row=2,column = 1,sticky="nesw")
 
-        self.login_btn.bind("<Button-1>",lambda event:self.login_proceed())
         # sign up side
                         # --------------------------- Input - user
         self.user_container_sign_up = ctk.CTkFrame(self.side_panel_login,fg_color="transparent",border_width=2,corner_radius=8,
@@ -178,7 +180,7 @@ class Login(ctk.CTkFrame):
         #image is from up login page side
         self.user_icon_sign_up.grid(row=0,column=0,padx=(12, 6))
 
-        self.user_input_signup = ctk.CTkEntry(self.user_container_sign_up,placeholder_text="Username / Email",fg_color="transparent",
+        self.user_input_signup = ctk.CTkEntry(self.user_container_sign_up,placeholder_text="Username",fg_color="transparent",
                                        border_width=0,height=28,corner_radius=0,font=("Arial", 13))
         self.user_input_signup.grid(row=0,column=1,padx=(0, 8),sticky="ew",pady=8) 
         
@@ -200,9 +202,10 @@ class Login(ctk.CTkFrame):
         self.email_input = ctk.CTkEntry(self.email_container,placeholder_text="Email",border_width=0,fg_color="transparent")
         self.email_input.grid(row=0,column=1,pady=8,padx=(0,8),sticky="ew")
 
-        self.send_code = ctk.CTkButton(self.email_container,text="Send Code",width=20,fg_color="transparent",
+        self.send_code = ctk.CTkButton(self.email_container,text="Send Code",width=90,fg_color="transparent",
                     hover_color=("#FC5C3D","#D4AF37"),text_color=("black","white"))
         self.send_code.grid(row=0,column=2,padx=(0,8))
+        self.send_code.configure(command=self.email_verification_message)
 
                         # --------------------------- Input - pass and comfirm pass
                                     #           pass
@@ -257,7 +260,7 @@ class Login(ctk.CTkFrame):
 
         self.create_new_acc_btn_sign_up = ctk.CTkButton(self.holder_login_create_container_sign_up,text="Create new account",height=44,
                 font=("Arial",15),hover_color=("#374151","#E5E7EB"),text_color=("white","black"),fg_color=("#FC5C3D","#D4AF37"),
-                command=lambda: self.change_mode("Sign Up"))
+                command=self.create_account)
         self.create_new_acc_btn_sign_up.grid(row=0,column = 1,sticky="nesw")
 
         self.or_label_middle_sign_up = ctk.CTkLabel(self.holder_login_create_container_sign_up,text_color="grey",
@@ -268,13 +271,14 @@ class Login(ctk.CTkFrame):
             hover_color=("#D9816F","#DDC881"),text_color=("white","black"),fg_color="#66738D")
         self.login_btn_sign_up.grid(row=2,column = 1,sticky="nesw")
 
-        self.login_btn_sign_up.bind("<Button-1>",lambda event:self.login_proceed())
+        self.login_btn_sign_up.configure(command=lambda: self.change_mode("Login"))
         #------------------------------------------------
         self.change_mode("Login") #cause once sign up containers load they replace login containers
 
     #------------------------------------------------ all functions to be used
     #function to change mdoe between sign up and login
     def change_mode(self,mode):
+        self.current_mode = mode
         if mode == "Login":
             self.active_line.grid_configure(column=0)
 
@@ -342,10 +346,53 @@ class Login(ctk.CTkFrame):
 
     #action for clicking login
     def login_proceed(self):
+        username_or_email = self.user_input.get().strip()
+        password = self.pass_input.get()
+
+        if not username_or_email or not password:
+            messagebox.showwarning("Login", "Enter your username/email and password.", parent=self)
+            return
+
+        user = db.login_user(username_or_email, password)
+        if user is None:
+            messagebox.showerror("Login failed", "The username/email or password is incorrect.", parent=self)
+            return
+
+        self.open_orbit(user)
+
+    #creates account using the sign up fields
+    def create_account(self):
+        username = self.user_input_signup.get().strip()
+        email = self.email_input.get().strip()
+        password = self.pass_input_sign_up.get()
+        confirm_password = self.conf_pass_input_sign_up.get()
+
+        if not username or not email or not password or not confirm_password:
+            messagebox.showwarning("Sign Up", "Fill in every field before creating an account.", parent=self)
+            return
+        if password != confirm_password:
+            messagebox.showerror("Sign Up", "The passwords do not match.", parent=self)
+            return
+
+        success, message, user_id = db.register_user(username, email, password)
+        if not success:
+            messagebox.showerror("Sign Up", message, parent=self)
+            return
+
+        user = db.get_user(user_id)
+        messagebox.showinfo("Sign Up", message, parent=self)
+        self.open_orbit(user)
+
+    #email verification needs an email service, so this button explains its current status
+    def email_verification_message(self):
+        messagebox.showinfo("Email verification", "Email verification is not connected yet. You can still create an account with your email address.", parent=self)
+
+    #opens the main Orbit pages after a successful login or sign up
+    def open_orbit(self, user):
         self.destroy() #removes all login page items
 
-        from pages.dashboard import Dashboard
-        dashboard_page_start = Dashboard(self.master) ; dashboard_page_start.pack(fill="both",expand=True)
+        from pages.sidebar_menu import Sidebar
+        sidebar_make = Sidebar(self.master, user) ; sidebar_make.pack(fill="both",expand=True)
         #self.master is sending this parent (root from main) to dashboard 
 
     #for animating gif
