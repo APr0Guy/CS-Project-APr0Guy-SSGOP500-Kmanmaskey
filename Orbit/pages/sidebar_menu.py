@@ -3,6 +3,7 @@ from PIL import Image, ImageSequence, ImageTk #for loading image
 import webbrowser
 import tkinter as tk
 from database import db
+from paths import resource_path
 
 
 class Sidebar(ctk.CTkFrame):
@@ -43,7 +44,7 @@ class Sidebar(ctk.CTkFrame):
         self.option_texts = {}
 
         # ----------------------------------- animated background
-        self.gif_path = r"Orbit\assets\sidebar_menu_orbit.gif"
+        self.gif_path = resource_path("assets/sidebar_menu_orbit.gif")
         self.gif_image = Image.open(self.gif_path)
         self.gif_frames = []
 
@@ -73,8 +74,8 @@ class Sidebar(ctk.CTkFrame):
 
         # ----------------------------------- logo and app name
 
-        self.icon_path_light = r"Orbit\assets\logo.png"
-        self.icon_path_dark = r"Orbit\assets\logo.png"
+        self.icon_path_light = resource_path("assets/logo.png")
+        self.icon_path_dark = resource_path("assets/logo.png")
         self.logo_image = Image.open(self.icon_path_light).convert("RGBA")
         self.logo_photo = None
 
@@ -85,18 +86,18 @@ class Sidebar(ctk.CTkFrame):
 
         #all the icons used in the sidebar
         self.icon_paths_dark = { #cause light mode dark icons look better
-            "Dashboard": r"Orbit\assets\house_(light_mode).png",
-            "Calendar": r"Orbit\assets\calendar_(light_mode).png",
-            "Notes": r"Orbit\assets\notes_(light_mode).png",
-            "Weather": r"Orbit\assets\weather_(light_mode).png",
-            "Settings": r"Orbit\assets\settings_(light_mode).png"
+            "Dashboard": resource_path("assets/house_(light_mode).png"),
+            "Calendar": resource_path("assets/calendar_(light_mode).png"),
+            "Notes": resource_path("assets/notes_(light_mode).png"),
+            "Weather": resource_path("assets/weather_(light_mode).png"),
+            "Settings": resource_path("assets/settings_(light_mode).png")
         }
         self.icon_paths = {
-            "Dashboard": r"Orbit\assets\house_(dark_mode).png",
-            "Calendar": r"Orbit\assets\calendar_(dark_mode).png",
-            "Notes": r"Orbit\assets\notes_(dark_mode).png",
-            "Weather": r"Orbit\assets\weather_(dark_mode).png",
-            "Settings": r"Orbit\assets\settings_(dark_mode).png"
+            "Dashboard": resource_path("assets/house_(dark_mode).png"),
+            "Calendar": resource_path("assets/calendar_(dark_mode).png"),
+            "Notes": resource_path("assets/notes_(dark_mode).png"),
+            "Weather": resource_path("assets/weather_(dark_mode).png"),
+            "Settings": resource_path("assets/settings_(dark_mode).png")
         }
 
         self.menu_icon_images = {}

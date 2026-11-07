@@ -1,14 +1,21 @@
 import sqlite3
 import os
+import sys
 import hashlib
 import secrets
 from pathlib import Path
 from datetime import date
 
-DATABASE_PATH = Path(__file__).resolve().parent / "orbit.db"
+if getattr(sys, "frozen", False):
+    # Packaged apps must store changing data outside the bundled _internal folder.
+    app_data = Path(os.environ.get("LOCALAPPDATA", Path.home())) / "Orbit"
+    DATABASE_PATH = app_data / "orbit.db"
+else:
+    # Keep the development database inside the project while running from source.
+    DATABASE_PATH = Path(__file__).resolve().parent / "orbit.db"
 
 # ------------------------------------------------ database setup
-#creates all tables used by Orbit and keeps the database beside this file so it can be moved with the project
+#creates all tables used by Orbit and stores user data in a writable location
 
 def create_database():
     os.makedirs(DATABASE_PATH.parent, exist_ok=True)

@@ -9,6 +9,8 @@ import os
 from datetime import datetime
 import time #for setting timer for api fetching request (10 min)
 
+from config import API_KEY #so key is already there
+
 # so all items with weather share these so timer for fetching is global
 weather_cache = None
 weather_cache_time = 0
@@ -23,7 +25,7 @@ class Weather(ctk.CTkFrame):
         self.compact = compact
 
 
-        self.api_key = "rma3kf9240bkjdb5lhov98rh9zs4y6nxjnkc9ija" #os.environ.get("METEOSOURCE_API_KEY","").strip()
+        self.api_key = API_KEY
 
 
         self.place_id = "kathmandu"

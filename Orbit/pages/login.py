@@ -4,6 +4,7 @@ from PIL import Image, ImageSequence, ImageTk #for loading image
 import webbrowser #for opening url when clicking logo and all
 from tkinter import messagebox
 from database import db
+from paths import resource_path
 
 class Login(ctk.CTkFrame):
     def __init__(self, parent):
@@ -24,7 +25,7 @@ class Login(ctk.CTkFrame):
         self.side_panel_with_logo.configure(fg_color="transparent")
 
         #for gif
-        self.gif_path = r"Orbit\assets\orbit_muted.gif"
+        self.gif_path = resource_path("assets/orbit_muted.gif")
         self.gif_image = Image.open(self.gif_path)
         self.gif_frames = []
 
@@ -47,8 +48,8 @@ class Login(ctk.CTkFrame):
             lambda event:webbrowser.open("https://github.com/APr0Guy/CS-Project-APr0Guy-SSGOP500-Kmanmaskey"))
 
                                 # ------------------------- Image
-        logo_path_dark = r"Orbit\assets\old_logo.png"
-        logo_path_light = r"Orbit\assets\logo.png"
+        logo_path_dark = resource_path("assets/old_logo.png")
+        logo_path_light = resource_path("assets/logo.png")
 
         self.logo_image_dark = Image.open(logo_path_dark).convert("RGBA")
         self.logo_image_light = Image.open(logo_path_light).convert("RGBA")
@@ -104,8 +105,8 @@ class Login(ctk.CTkFrame):
         self.user_container.grid_rowconfigure(0,weight=1) ; self.user_container.grid_columnconfigure(1,weight=1)
         self.user_container.propagate(False) #so frame wont change size to fit more children widget added into it
 
-        self.user_logo_path_dark = r"Orbit\assets\user_logo_(dark_mode).png"
-        self.user_logo_path_light = r"Orbit\assets\user_logo_(light_mode).png"
+        self.user_logo_path_dark = resource_path("assets/user_logo_(dark_mode).png")
+        self.user_logo_path_light = resource_path("assets/user_logo_(light_mode).png")
         self.loaded_user_logo = ctk.CTkImage(light_image=Image.open(self.user_logo_path_light),
                                              dark_image=Image.open(self.user_logo_path_dark),size=(18,18))
 
@@ -125,8 +126,8 @@ class Login(ctk.CTkFrame):
         self.pass_container.grid_rowconfigure(0,weight=1) ; self.pass_container.grid_columnconfigure(1,weight=1)
         self.pass_container.propagate(False)
 
-        self.pass_logo_path_light = r"Orbit\assets\padlock_(light_mode).png"
-        self.pass_logo_path_dark = r"Orbit\assets\padlock_(dark_mode).png"
+        self.pass_logo_path_light = resource_path("assets/padlock_(light_mode).png")
+        self.pass_logo_path_dark = resource_path("assets/padlock_(dark_mode).png")
         self.loaded_pass_logo = ctk.CTkImage(light_image=Image.open(self.pass_logo_path_light),
                 dark_image=Image.open(self.pass_logo_path_dark),size=(18,18))
 
@@ -137,8 +138,8 @@ class Login(ctk.CTkFrame):
                                        show="*",fg_color="transparent")
         self.pass_input.grid(row=0,column=1,pady=8,padx=(0,8),sticky="ew")
 
-        self.pass_show_logo_path_darkmode = r"Orbit\assets\hide_pass_(dark_mode).png" 
-        self.pass_show_logo_path_lightmode = r"Orbit\assets\hide_pass_(light_mode).png"
+        self.pass_show_logo_path_darkmode = resource_path("assets/hide_pass_(dark_mode).png") 
+        self.pass_show_logo_path_lightmode = resource_path("assets/hide_pass_(light_mode).png")
         self.loaded_pass_show_logo = ctk.CTkImage(light_image=Image.open(self.pass_show_logo_path_lightmode),
                                                 dark_image=Image.open(self.pass_show_logo_path_darkmode),size=(20,20))
         self.show_pass = ctk.CTkButton(self.pass_container,text="",image=self.loaded_pass_show_logo,
@@ -191,8 +192,8 @@ class Login(ctk.CTkFrame):
         self.email_container.grid_rowconfigure(0,weight=1) ; self.email_container.grid_columnconfigure(1,weight=1)
         self.email_container.propagate(False)
 
-        self.email_logo_path_light = r"Orbit\assets\email_(light_mode).png"
-        self.email_logo_path_dark = r"Orbit\assets\email_(dark_mode).png"
+        self.email_logo_path_light = resource_path("assets/email_(light_mode).png")
+        self.email_logo_path_dark = resource_path("assets/email_(dark_mode).png")
         self.loaded_email_logo = ctk.CTkImage(light_image=Image.open(self.email_logo_path_light),
                 dark_image=Image.open(self.email_logo_path_dark),size=(18,18))
 
@@ -314,8 +315,8 @@ class Login(ctk.CTkFrame):
         self.pass_visibility_change[mode] = not(self.pass_visibility_change[mode]) #changes value of that mode
 
         if self.pass_visibility_change[mode]:
-            self.pass_show_logo_path_darkmode = r"Orbit\assets\show_pass_(dark_mode).png" 
-            self.pass_show_logo_path_lightmode = r"Orbit\assets\show_pass_(light_mode).png"
+            self.pass_show_logo_path_darkmode = resource_path("assets/show_pass_(dark_mode).png") 
+            self.pass_show_logo_path_lightmode = resource_path("assets/show_pass_(light_mode).png")
             self.loaded_pass_show_logo = ctk.CTkImage(light_image=Image.open(self.pass_show_logo_path_lightmode),
             dark_image=Image.open(self.pass_show_logo_path_darkmode),size=(20,20))
 
@@ -326,8 +327,8 @@ class Login(ctk.CTkFrame):
                 self.pass_input_sign_up.configure(show="") #does both at once show pass in sign up and conf show pass
                 self.conf_pass_input_sign_up.configure(show="")
         else:
-            self.pass_show_logo_path_darkmode = r"Orbit\assets\hide_pass_(dark_mode).png" 
-            self.pass_show_logo_path_lightmode = r"Orbit\assets\hide_pass_(light_mode).png"
+            self.pass_show_logo_path_darkmode = resource_path("assets/hide_pass_(dark_mode).png") 
+            self.pass_show_logo_path_lightmode = resource_path("assets/hide_pass_(light_mode).png")
             self.loaded_pass_show_logo = ctk.CTkImage(light_image=Image.open(self.pass_show_logo_path_lightmode),
                     dark_image=Image.open(self.pass_show_logo_path_darkmode),size=(20,20))
 

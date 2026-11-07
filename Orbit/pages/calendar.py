@@ -4,6 +4,7 @@ import calendar as calendar_module
 from datetime import date, datetime
 from tkinter import messagebox
 from database import db
+from paths import resource_path
 
 class Calendar(ctk.CTkFrame):
     def __init__(self,parent,user=None):
@@ -169,7 +170,7 @@ class Calendar(ctk.CTkFrame):
         self.event_window.transient(self.winfo_toplevel())
         self.event_window.grab_set()
         self.event_window.grid_columnconfigure(0,weight=1)
-        self.event_window.iconbitmap(r"Orbit\assets\logo.ico") #logo
+        self.event_window.iconbitmap(resource_path("assets/logo.ico")) #logo
 
         ctk.CTkLabel(self.event_window,text="Add New Calendar Event",font=("Arial",20,"bold"),text_color=("#1F2937","#F3F4F6")).grid(row=0,column=0,sticky="w",padx=24,pady=(22,14))
         ctk.CTkLabel(self.event_window,text="Event title",font=("Arial",12,"bold")).grid(row=1,column=0,sticky="w",padx=24)

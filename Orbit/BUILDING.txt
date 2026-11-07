@@ -1,0 +1,15 @@
+ORBIT - BUILDING THE WINDOWS APPLICATION
+
+1. Open Command Prompt in this Orbit folder.
+2. Install dependencies:
+   python -m pip install -r requirements.txt
+3. Build the app:
+   python -m PyInstaller --clean --noconfirm --onedir --windowed --name Orbit --icon=assets/logo.ico --add-data "assets;assets" main.py
+4. Run:
+   dist\Orbit\Orbit.exe
+
+Share the ENTIRE dist\Orbit folder (or ZIP that folder). Do not share only Orbit.exe.
+
+Assets are loaded through paths.resource_path(). Packaged database data is stored in:
+%LOCALAPPDATA%\Orbit\orbit.db
+Attachments are stored beside that database in the attachments folder.

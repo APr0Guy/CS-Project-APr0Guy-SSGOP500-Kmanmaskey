@@ -1,14 +1,12 @@
 import ctypes #for changing app logo in taskbar
 import os
-from pathlib import Path
 
 if os.name == "nt":
     ctypes.windll.shell32.SetCurrentProcessExplicitAppUserModelID("Orbit")
 
-os.chdir(Path(__file__).resolve().parent.parent) #keeps the current Orbit\assets paths working even if main.py is opened directly
-
 import customtkinter as ctk
 from database import db
+from paths import resource_path
 
 # SSG connect the db and these files all them are in quotes or comments
 db.create_database() #creates the sqlite database before the app opens
@@ -25,7 +23,7 @@ x = (screen_width - needed_width) // 2
 y = (screen_height - needed_height) // 2
 
 root.geometry(f"{needed_width}x{needed_height}+{x}+{y}") #screen centered with offset x and y amount
-root.iconbitmap(r"Orbit\assets\logo.ico") #image
+root.iconbitmap(resource_path("assets/logo.ico")) #image
 
 root.title("Orbit")
 root.minsize(1100,700) #so user cant decrese size less that this amount
