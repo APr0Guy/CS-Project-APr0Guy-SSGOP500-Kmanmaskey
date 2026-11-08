@@ -51,4 +51,5 @@ FEATURES
 
 NOTES
 -----
-Email verifiction is a wip 
+- Email verifiction is a wip 
+- Currently weather is only shown for Kathmandu, if you wish to change under Orbit/pages/weather.py navigate to url and change it to your wish (P.S. it's only for direct running for exe you need to use PyInstaller to build exe again respectively but remove config.json from main file build it then inside dist/Orbit beside _initial, orbit.exe put config.json as shown under _releases_)
