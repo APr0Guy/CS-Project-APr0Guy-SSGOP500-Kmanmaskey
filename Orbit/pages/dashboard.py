@@ -26,9 +26,11 @@ class Dashboard(ctk.CTkFrame):
         self.welcome_subtitle = ctk.CTkLabel(self.welcome_frame,text="Plan smart. Stay in orbit.",
             font=("Arial",13),text_color=("#64748B","#A1A1AA"),anchor="w")
         self.welcome_subtitle.grid(row=1,column=0,sticky="w",pady=(3,0))
-        self.today_label = ctk.CTkLabel(self.welcome_frame,text=date.today().strftime("%A, %d %B %Y"),
-            font=("Arial",13,"bold"),text_color=("#FC5C3D","#D4AF37"))
+
+        self.today_label = ctk.CTkLabel(self.welcome_frame,text=datetime.now().strftime("%H:%M:%S - %A, %d %B %Y"),
+            font=("Arial",20,"bold"),text_color=("#FC5C3D","#D4AF37"))
         self.today_label.grid(row=0,column=1,rowspan=2,padx=(10,0))
+        self.change_today_label_time() #updates time
 
         # ------------------------ quick summary cards
         self.pending_card = ctk.CTkFrame(self,fg_color=("#FFFFFF","#30343B"),corner_radius=14)
@@ -104,6 +106,13 @@ class Dashboard(ctk.CTkFrame):
         self.refresh_dashboard()
 
     #------------------------------------------------ all functions to be used
+    #updates time
+    def change_today_label_time(self):
+        self.today_label.configure(text=datetime.now().strftime("%H:%M:%S - %A, %d %B %Y"))
+
+        #repeats every 1000ms / 1 sec 
+        self.today_label.after(1000,self.change_today_label_time)
+
     #updates the cards and lists with the latest database information
     def refresh_dashboard(self):
         if not self.winfo_exists():
