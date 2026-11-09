@@ -11,10 +11,10 @@ Orbit/assets/              Images and animated backgrounds
 SETUP
 -----
 1. Install Python 3.10 or newer.
-2. Open Command Prompt or PowerShell in the folder that contains the Orbit folder.
-3. Install the required packages:
+2. Open Command Prompt or PowerShell in the folder that contains the project folder.
+3. Install the required packages after downloading and extracting zip go to folder/directory where file is located:
 
-   py -m pip install -r Orbit/requirements.txt
+   py -m pip install -r requirements.txt
 
 4. Set your Meteosource API key before starting the app. (https://www.meteosource.com/)
    Orbit/config.json/
