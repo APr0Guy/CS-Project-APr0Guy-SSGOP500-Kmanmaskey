@@ -137,6 +137,8 @@ class Login(ctk.CTkFrame):
         self.pass_input = ctk.CTkEntry(self.pass_container,placeholder_text="Password",border_width=0,
                                        show="*",fg_color="transparent")
         self.pass_input.grid(row=0,column=1,pady=8,padx=(0,8),sticky="ew")
+        #when pressing enter btn makes a  fake event for clicking login
+        self.pass_input.bind("<Return>",lambda event:self.login_btn.invoke()) 
 
         self.pass_show_logo_path_darkmode = resource_path("assets/hide_pass_(dark_mode).png") 
         self.pass_show_logo_path_lightmode = resource_path("assets/hide_pass_(light_mode).png")
@@ -244,12 +246,14 @@ class Login(ctk.CTkFrame):
         self.conf_pass_input_sign_up = ctk.CTkEntry(self.conf_pass_container_sign_up,placeholder_text="Password",border_width=0,
                                        show="*",fg_color="transparent")
         self.conf_pass_input_sign_up.grid(row=0,column=1,pady=8,padx=(0,8),sticky="ew")
+        self.conf_pass_input_sign_up.bind("<Return>",lambda event=None: self.create_new_acc_btn_sign_up.invoke())
 
         self.conf_show_pass_sign_up = ctk.CTkButton(self.conf_pass_container_sign_up,text="",image=self.loaded_pass_show_logo,
                                        width=20,fg_color="transparent",hover_color=("#FC5C3D","#D4AF37"))
         #logo is from up
         self.conf_show_pass_sign_up.grid(row=0,column=2,padx=(0,8))
         self.conf_show_pass_sign_up.bind("<Button-1>",lambda event:self.change_pass_visibility("Sign Up"))
+
 
                                 # --------------------------- create new account / login
 
